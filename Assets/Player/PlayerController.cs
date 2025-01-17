@@ -1,8 +1,10 @@
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private InputActionReference moveActionReference;
@@ -10,10 +12,12 @@ public class CharacterController : MonoBehaviour
     private InputActionReference rotationActionReference;
     [SerializeField]
     float speed = 1.0f;
+    
 
     private Vector3 newPos;
     private Vector2 frameMovement;
     private Vector2 cameraMovement;
+    
 
     //private int interpolationFramesCount = 45; // Number of frames to completely interpolate between the 2 positions
     //private double elapsedFrames = 0;
@@ -28,20 +32,16 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //float interpolationRatio = (float)elapsedFrames / interpolationFramesCount;
-        //gameObject.transform.position = Vector3.Lerp(A, B, interpolationRatio);
+        Vector2 framePlayerMovement = moveActionReference.action.ReadValue<Vector2>();
+        Vector2 framePlayerRotation = rotationActionReference.action.ReadValue<Vector2>();
 
-        //elapsedFrames = (elapsedFrames + 0.1) % (interpolationFramesCount + 0.1);
-        Vector2 frameMovement = moveActionReference.action.ReadValue<Vector2>();
-        Vector2 cameraMovement = rotationActionReference.action.ReadValue<Vector2>();
+        Vector3 playerMovement = new Vector3(framePlayerMovement.x, 0, framePlayerMovement.y);
+        Vector3 playerRotation = new Vector3(0, framePlayerRotation.x, framePlayerRotation.y);
 
-        Vector3 newPos = new Vector3(frameMovement.x, 0, frameMovement.y);
-        Vector3 newCam = new Vector3(0, cameraMovement.x, cameraMovement.y);
+        gameObject.transform.Rotate(playerRotation);
 
-        //Quaternion playerOrientation = Quaternion.LookRotation(newPos * speed * Time.deltaTime); 
+        Vector3 playerOffset = framePlayerMovement.x * transform.right + framePlayerMovement.y * transform.forward;
 
-        gameObject.transform.position += newPos * speed * Time.deltaTime ;
-        gameObject.transform.Rotate(newCam); 
-        
+        gameObject.transform.position += playerOffset * speed * Time.deltaTime;
     }
 }
