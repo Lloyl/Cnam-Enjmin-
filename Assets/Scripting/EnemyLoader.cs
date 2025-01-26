@@ -11,15 +11,22 @@ public class EnemyLoader : MonoBehaviour
     [Range(3,10)]
     public float spawnTimer;
     public Material spawnMaterial;
+
+    private ShootProjectile projectile;
     void Start()
     {
         InvokeRepeating("SpawnEnnemy", 2.0f, spawnTimer);
+        //projectile.Onshoot += SpawnEnnemy; // quand il y a l'event on appelle une fois la fonction SpawnEnnemy
     }
 
-    // Update is called once per frame
     void SpawnEnnemy()
     {
+        //projectile.Onshoot -= SpawnEnnemy; // on arete de l'appeler
         Vector3 enemyOffset = new Vector3(Random.Range(-spawnZoneScale/2.0f, spawnZoneScale / 2.0f), 0 , Random.Range(-spawnZoneScale / 2.0f, spawnZoneScale / 2.0f));
         Instantiate(ennemyPrefab, transform.position + enemyOffset, Quaternion.identity);
+    }
+    public void setEnnemy(GameObject enemyPrefab)
+    {
+        this.ennemyPrefab = enemyPrefab;
     }
 }

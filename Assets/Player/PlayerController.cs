@@ -1,9 +1,5 @@
-using TreeEditor;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -12,12 +8,10 @@ public class PlayerController : MonoBehaviour
     private InputActionReference rotationActionReference;
     [SerializeField]
     float speed = 1.0f;
-    
+    [SerializeField]
+    private Animator animator;
 
-    private Vector3 newPos;
-    private Vector2 frameMovement;
-    private Vector2 cameraMovement;
-    
+    private const string ANIMATOR_BOOL_IS_RUNNING = "IsRunning";
 
     //private int interpolationFramesCount = 45; // Number of frames to completely interpolate between the 2 positions
     //private double elapsedFrames = 0;
@@ -41,7 +35,7 @@ public class PlayerController : MonoBehaviour
         gameObject.transform.Rotate(playerRotation);
 
         Vector3 playerOffset = framePlayerMovement.x * transform.right + framePlayerMovement.y * transform.forward;
-
+        animator.SetBool(ANIMATOR_BOOL_IS_RUNNING, framePlayerMovement.x !=0 || framePlayerMovement.y != 0);
         gameObject.transform.position += playerOffset * speed * Time.deltaTime;
     }
 }

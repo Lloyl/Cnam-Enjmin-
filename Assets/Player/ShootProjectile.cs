@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class ShootProjectile : MonoBehaviour
@@ -11,9 +13,12 @@ public class ShootProjectile : MonoBehaviour
     private InputActionReference shootActionReference;
     [Range(0.01f, 10f)]
     public float rateOfFire;
+    private Button monButton;
+    //public event Action Onshoot;
     void Start()
     {
         shootActionReference.action.Enable();
+        //monButton.onClick.AddListener(Shoot);
     }
 
     // Update is called once per frame
@@ -28,8 +33,8 @@ public class ShootProjectile : MonoBehaviour
     {
         GameObject bullet = Instantiate(projectile, transform.position, transform.rotation);
         bullet.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, launchVelocity, 0));
+        //Onshoot?.Invoke(); // <=> if(Onshoot != null){ Onshoot.Invoke() }
         Destroy(bullet, 1.0f);
 
     }
 }
-
